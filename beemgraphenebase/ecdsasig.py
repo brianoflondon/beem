@@ -278,9 +278,9 @@ def verify_message(message, signature, hashfn=hashlib.sha256, recover_parameter=
         return None
 
     if SECP256K1_MODULE == "secp256k1":
-        ALL_FLAGS = secp256k1.lib.SECP256K1_CONTEXT_VERIFY | secp256k1.lib.SECP256K1_CONTEXT_SIGN
+        # ALL_FLAGS = secp256k1.lib.SECP256K1_CONTEXT_VERIFY | secp256k1.lib.SECP256K1_CONTEXT_SIGN
         # Placeholder
-        pub = secp256k1.PublicKey(flags=ALL_FLAGS)
+        pub = secp256k1.PublicKey()
         # Recover raw signature
         sig = pub.ecdsa_recoverable_deserialize(sig, recover_parameter)
         # Recover PublicKey
