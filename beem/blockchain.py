@@ -730,6 +730,7 @@ class Blockchain(object):
             for trx_nr in range(len(trx)):
                 if "operations" not in trx[trx_nr]:
                     continue
+                count = 0
                 for event in trx[trx_nr]["operations"]:
                     if isinstance(event, list):
                         op_type, op = event
@@ -763,18 +764,23 @@ class Blockchain(object):
                         timestamp = event.get("timestamp")
                     if not bool(opNames) or op_type in opNames and block_num > 0:
                         if raw_ops:
+                            count += 1
                             yield {"block_num": block_num,
                                    "trx_num": trx_nr,
                                    "op": [op_type, op],
-                                   "timestamp": timestamp}
+                                   "timestamp": timestamp,
+                                   "op_in_trx": count
+                                   }
                         else:
+                            count += 1
                             updated_op = {"type": op_type}
                             updated_op.update(op.copy())
                             updated_op.update({"_id": _id,
                                                "timestamp": timestamp,
                                                "block_num": block_num,
                                                "trx_num": trx_nr,
-                                               "trx_id": trx_id})
+                                               "trx_id": trx_id,
+                                               "op_in_trx": count})
                             yield updated_op
 
     def awaitTxConfirmation(self, transaction, limit=10):
