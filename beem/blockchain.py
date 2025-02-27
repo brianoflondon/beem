@@ -764,15 +764,15 @@ class Blockchain(object):
                         timestamp = event.get("timestamp")
                     if not bool(opNames) or op_type in opNames and block_num > 0:
                         if raw_ops:
-                            count += 1
-                            yield {"block_num": block_num,
+                            ans = {"block_num": block_num,
                                    "trx_num": trx_nr,
                                    "op": [op_type, op],
                                    "timestamp": timestamp,
                                    "op_in_trx": count
                                    }
-                        else:
                             count += 1
+                            yield ans
+                        else:
                             updated_op = {"type": op_type}
                             updated_op.update(op.copy())
                             updated_op.update({"_id": _id,
@@ -781,6 +781,7 @@ class Blockchain(object):
                                                "trx_num": trx_nr,
                                                "trx_id": trx_id,
                                                "op_in_trx": count})
+                            count += 1
                             yield updated_op
 
     def awaitTxConfirmation(self, transaction, limit=10):
